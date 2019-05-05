@@ -2,6 +2,7 @@ import api from '@/api'
 import { AxiosResponse } from 'axios'
 import { OK } from 'http-status-codes'
 import { Module } from 'vuex'
+import router from '@/router'
 
 export default {
   namespaced: true,
@@ -38,8 +39,10 @@ export default {
         state.token = token
         window.localStorage.setItem('token', token)
 
-        const { default: loadRoute } = await import('@/router/load-route')
-        await loadRoute()
+        const { routes, navItems } = await import(`./roles/${user.data.roles}`)
+
+        router.addRoutes(routes)
+        commit('app/SET_NAVIGATION_ITEMS', navItems, { root: true })
       }
 
       return user
