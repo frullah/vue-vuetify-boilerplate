@@ -33,12 +33,3 @@ new Vue({
 if (module.hot) {
   module.hot.accept()
 }
-
-if (process.env.NODE_ENV === 'development') {
-  Object.defineProperty(window, 'c', {
-    get () {
-      const { matched } = router.currentRoute
-      return matched[matched.length - 1].instances.default
-    }
-  })
-}
