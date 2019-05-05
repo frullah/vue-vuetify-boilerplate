@@ -42,6 +42,7 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
+    "fast-async": "^7.0.6",
     "flush-promises": "^1.0.2",
     "http-status-codes": "^1.3.2",
     "lint-staged": "^8.1.5",
