@@ -1,5 +1,11 @@
 # vue-vuetify-boilerplate
 
+## This boilerplate already contains :
+- Password field component
+- Sign up views
+- Login views
+- Reset password views
+
 ## Project setup
 ```
 npm install
