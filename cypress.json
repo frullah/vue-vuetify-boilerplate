@@ -4,5 +4,7 @@
     "username": "xcheam",
     "email": "xcheam@gmail.com",
     "password": "e2e-testing"
-  }
+  },
+  "viewportWidth": 1024,
+  "viewportHeight": 768
 }
