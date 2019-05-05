@@ -60,7 +60,6 @@ export default {
   },
   mutations: {
     CLEAR_TOKEN (state) {
-
       state.token = null
       state.data = null
       window.localStorage.removeItem('token')
