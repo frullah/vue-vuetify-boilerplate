@@ -33,5 +33,8 @@ module.exports = {
           return options
         })
     }
+  },
+  pwa: {
+    themeColor: '#1976d2'
   }
 }
