@@ -1,0 +1,8 @@
+{
+  "pluginsFile": "tests/e2e/plugins/index.js",
+  "env": {
+    "username": "xcheam",
+    "email": "xcheam@gmail.com",
+    "password": "e2e-testing"
+  }
+}
