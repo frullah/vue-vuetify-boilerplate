@@ -1,5 +1,6 @@
 module.exports = {
   presets: [
+    '@babel/preset-env',
     [
       '@vue/app',
       {
@@ -16,7 +17,8 @@ module.exports = {
       'module:fast-async',
       {
         codeGenerationOptions: {
-          wrapAwait: false
+          wrapAwait: false,
+          es6target: true
         }
       }
     ]
