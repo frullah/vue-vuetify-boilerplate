@@ -23,6 +23,16 @@ declare namespace App {
     link?: string
     items?: NavigationItem[]
   }
+
+  interface IToken {
+    accessToken: string | null
+    refreshToken: string | null
+  }
+
+  interface ILogin {
+    identifier: string
+    password: string
+  }
 }
 
 export = App
