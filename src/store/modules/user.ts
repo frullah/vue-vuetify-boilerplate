@@ -3,6 +3,10 @@ import { AxiosResponse } from 'axios'
 import { OK } from 'http-status-codes'
 import { Module } from 'vuex'
 import router from '@/router'
+import { IToken, ILogin } from '@/types'
+
+const accessTokenHeaderName = 'X-Access-Token'
+const refreshTokenHeaderName = 'X-Refresh-Token'
 
 export default {
   namespaced: true,
@@ -11,36 +15,44 @@ export default {
       commit('CLEAR_TOKEN')
       commit('app/SET_NAVIGATION_ITEMS', null, { root: true })
     },
-    async LOGIN (
-      { dispatch },
-      { identifier, password }: { identifier: string, password: string }
-    ) {
+    async LOGIN ({ dispatch }, { identifier, password }: ILogin) {
       const { data } = await api.post('auth', { identifier, password })
-      return dispatch('FETCH', data.token)
+      return dispatch('FETCH', {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken
+      } as IToken)
     },
-    async FETCH ({ state, commit }, token: string) {
-      const authorization = `Bearer ${token}`
+    async FETCH ({ state, commit }, { accessToken, refreshToken } : IToken) {
       let user: AxiosResponse<any>
       try {
         user = await api.get('auth/data', {
           headers: {
-            authorization
+            [accessTokenHeaderName]: accessToken,
+            [refreshTokenHeaderName]: refreshToken
           }
         })
       } catch (error) {
-        window.localStorage.removeItem('token')
+        clearToken()
         throw error
       }
 
       if (user.status === OK) {
-        api.defaults.headers.authorization = authorization
+        state.accessToken = accessToken
+        if (accessTokenHeaderName in user.headers) {
+          accessToken = user.headers[accessTokenHeaderName]
+        }
+        if (refreshTokenHeaderName in user.headers) {
 
-        state.data = await user.data
-        state.token = token
-        window.localStorage.setItem('token', token)
+        }
+        api.defaults.headers[accessTokenHeaderName] = accessToken
+        window.localStorage.setItem('accessToken', accessToken!)
 
-        const { routes, navItems } = await import(`./roles/${user.data.roles}`)
+        state.refreshToken = refreshToken
+        api.defaults.headers[refreshTokenHeaderName] = refreshToken
+        window.localStorage.setItem('refreshToken', refreshToken!)
 
+        state.data = user.data
+        const { routes, navItems } = await import(`@/router/roles/admin`)
         router.addRoutes(routes)
         commit('app/SET_NAVIGATION_ITEMS', navItems, { root: true })
       }
@@ -48,47 +60,44 @@ export default {
       return user
     },
     async LOAD_SESSION ({ dispatch, state, commit }) {
-      const token = window.localStorage.getItem('token')
-      return token && dispatch('FETCH', token)
+      const accessToken = window.localStorage.getItem('accessToken')
+      const refreshToken = window.localStorage.getItem('refreshToken')
+      if (accessToken !== null && refreshToken !== null) {
+        await dispatch('FETCH', { accessToken, refreshToken })
+      }
     }
   },
   getters: {
-    isLoggedIn: (state) => state.token !== null,
-    name (state) {
-      const { data } = state
-      if (data === null) { return null }
-      if (data.lastName === null) { return data.firstName }
-      return `${data.firstName} ${data.lastName}`
-    }
+    isLoggedIn: (state) => state.accessToken !== null
   },
   mutations: {
     CLEAR_TOKEN (state) {
-      state.token = null
+      clearToken()
+
       state.data = null
-      window.localStorage.removeItem('token')
-      delete api.defaults.headers.authorization
+      state.accessToken = null
+      state.refreshToken = null
+      delete api.defaults.headers[accessTokenHeaderName]
+      delete api.defaults.headers[refreshTokenHeaderName]
     }
   },
   state: {
-    token: null,
-    data: {
-      firstName: null,
-      lastName: null,
-      roles: null,
-      username: null
-    }
+    accessToken: null,
+    refreshToken: null,
+    data: null
   }
 } as Module<
-  {
-    token: string | null
-    data: {
+  IToken & {
+    data: null | {
       username: string | null,
       roles: string | null,
-      firstName: string | null,
-      lastName: string | null
-    } | null
+      fullName: string | null,
+    }
   },
-  {
-
-  }
+  {}
 >
+
+function clearToken () {
+  window.localStorage.removeItem('accessToken')
+  window.localStorage.removeItem('refreshToken')
+}

@@ -9,7 +9,11 @@ export const userAvailability: Rule = {
       : `Cannot check ${field} to server`
   },
   async validate (value, args) {
-    const context = args[0]
+    if (args === undefined) {
+      throw new Error('args cannot be undefined')
+    }
+
+    const context = args[0] || 'user'
     const mustExists = args[1] === 'true' || args[1] !== 'false'
     let exists = false
     let notChecked = false
@@ -17,14 +21,12 @@ export const userAvailability: Rule = {
 
     try {
       const response = await api.get(
-        '/user/availability',
+        '/user-availibility/username',
         { params: { context, value } }
       )
-
       exists = response.status === 200
     } catch (error) {
       const { response }: AxiosError = error
-
       if (response === undefined) {
         message = 'Cannot connect to server'
       }
@@ -32,19 +34,15 @@ export const userAvailability: Rule = {
 
     if (message === undefined) {
       if (exists) {
-        if (!mustExists) {
-          message = 'already used'
-        }
+        if (!mustExists) { message = 'already used' }
       } else {
-        if (mustExists) {
-          message = 'not available'
-        }
+        if (mustExists) { message = 'not available' }
       }
     }
 
     return {
       valid: exists === mustExists && message === undefined,
       data: { message, notChecked }
-    } as any
+    }
   }
 }

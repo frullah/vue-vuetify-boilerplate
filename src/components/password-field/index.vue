@@ -5,7 +5,7 @@
     :value="value",
     :outline="outline",
     :name="$attrs.name",
-    :browser-autocomplete="browserAutocomplete"
+    :autocomplete="browserAutocomplete"
     :type="passwordFieldType",
     :error-messages="errorMessages",
     :success-messages="successMessages",

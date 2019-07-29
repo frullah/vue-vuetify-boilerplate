@@ -1,6 +1,6 @@
 import Component from 'vue-class-component'
 import { Mixins, Prop } from 'vue-property-decorator'
-import VTextField from 'vuetify/lib/components/VTextField/VTextField'
+import { VTextField } from 'vuetify/lib'
 
 @Component({
   name: 'password-field'

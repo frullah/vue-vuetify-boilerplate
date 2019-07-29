@@ -1,20 +1,33 @@
-import { shallowMount } from '@vue/test-utils'
 import ResetPassword from '@/views/reset-password/index.vue'
-import { VTextField, VAlert } from 'vuetify/lib'
+import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
+import VeeValidate from 'vee-validate'
+import Vuetify from 'vuetify'
+import { VAlert, VTextField } from 'vuetify/lib'
+import VueRouter from 'vue-router'
+
+const localVue = createLocalVue()
+localVue.use(VeeValidate)
+localVue.use(VueRouter)
 
 describe('Reset password views', () => {
-  it('should focus username first', () => {
-    const wrapper = shallowMount(ResetPassword, {
-      stubs: { VTextField }
+  const mountFn = (options = {}) => {
+    return mount(ResetPassword, {
+      localVue,
+      router: new VueRouter({ mode: 'history' }),
+      vuetify: new Vuetify(),
+      ...options
     })
+  }
 
-    expect(document.activeElement!.getAttribute('data-test')).toBe('email-input')
+  it('should focus username first', () => {
+    mountFn({ stubs: ['router-link'] })
+    expect(document.activeElement!.getAttribute('data-test'))
+      .toBe('email-input')
   })
 
   it('show error when username or email not found', async () => {
-    const wrapper = shallowMount(ResetPassword, {
-      stubs: { VTextField, VAlert },
+    const wrapper = mountFn({
       data: () => ({ email: 'invalid-email@domain.tld' }),
       methods: {
         resetPassword: jest.fn().mockImplementationOnce(async () => {
@@ -33,8 +46,7 @@ describe('Reset password views', () => {
   })
 
   it('show success message when success', async () => {
-    const wrapper = shallowMount(ResetPassword, {
-      stubs: { VTextField, VAlert },
+    const wrapper = mountFn({
       data: () => ({ email: 'signed-email@domain.tld' }),
       methods: {
         resetPassword: jest.fn().mockImplementationOnce(async () => {
@@ -53,12 +65,11 @@ describe('Reset password views', () => {
   })
 
   it('show login link when success', () => {
-    const wrapper = shallowMount(ResetPassword, {
-      stubs: { VTextField },
+    const wrapper = mountFn({
       data: () => ({ sent: true })
     })
 
-    expect(wrapper.find('[data-test="login-link"]').attributes('to'))
+    expect(wrapper.find('[data-test="login-link"]').attributes('href'))
       .toBe('/login')
   })
 })

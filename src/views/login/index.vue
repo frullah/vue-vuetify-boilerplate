@@ -19,7 +19,7 @@ v-container(fill-height, align-center, justify-center)
           :readonly="processing",
           autofocus,
           outline,
-          browser-autocomplete="on",
+          autocomplete="on",
           name="username",
           label="Username or email",
           maxlength="32",
@@ -30,7 +30,7 @@ v-container(fill-height, align-center, justify-center)
           v-model="password",
           :readonly="processing",
           outline,
-          browser-autocomplete="current-password",
+          autocomplete="current-password",
           label="Password",
           name="password",
           v-validate.disable="'required'",
@@ -48,7 +48,7 @@ v-container(fill-height, align-center, justify-center)
       v-spacer
       v-btn.ma-0.text-none(
         data-test="reset-password-link",
-        flat,
+        text,
         color="primary",
         :disabled="processing",
         to="/reset-password")
@@ -56,7 +56,7 @@ v-container(fill-height, align-center, justify-center)
       v-divider(vertical)
       v-btn.ma-0.text-none(
         data-test="signup-link",
-        flat,
+        text,
         color="primary",
         to="/signup")
         | Create account

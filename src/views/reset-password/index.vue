@@ -7,7 +7,7 @@ v-container(fill-height, align-center, justify-center)
     transition(name="slide-y-reverse", mode="out-in")
       v-card-text(v-if="!sent", key="1")
         v-alert(
-          :value="error",
+          :value="hasError",
           type="error",
           transition="slide-y-reverse-transition",
           dismissible,)
@@ -34,7 +34,7 @@ v-container(fill-height, align-center, justify-center)
               v-btn.ma-0.text-none(
                 data-test="login-link",
                 to="/login",
-                flat,
+                text,
                 color="primary")
                 | Back to login
       v-card-text(v-else, key="2")

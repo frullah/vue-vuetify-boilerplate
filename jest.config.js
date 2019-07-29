@@ -17,6 +17,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@test/(.*)$': '<rootDir>/tests/unit/$1',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
     '^vuetify/lib(.+)': 'vuetify/es5$1',
     '^vuetify/lib$': 'vuetify/es5/entry-lib'

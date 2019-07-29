@@ -1,14 +1,14 @@
 <template lang="pug">
 
 v-app
-  v-toolbar(app, clipped-left, color="primary", dark, dense)
+  v-app-bar(app, clipped-left, color="primary", dark, dense)
     v-toolbar-side-icon(
       v-if="hasNavigationItems",
       large,
       @click="sideIconOnClick")
 
     v-toolbar-items
-      v-btn.text-capitalize(flat, to="/")
+      v-btn.text-capitalize(text, to="/")
         | Home
     v-spacer
 
@@ -35,12 +35,12 @@ v-app
       v-toolbar-items
         v-btn.text-none(
           data-test="app-login-btn",
-          flat,
+          text,
           to="/login")
           | Log in
         v-btn.text-none(
           data-test="app-signup-btn",
-          flat,
+          text,
           to="/signup")
           | Sign up
 

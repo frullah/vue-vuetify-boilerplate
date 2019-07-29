@@ -16,7 +16,7 @@ v-container(fill-height, align-center, justify-center)
           name="email",
           :error-messages="errors.first('email')",
           label="Email",
-          browser-autocomplete="email",
+          autocomplete="email",
           maxlength="192")
         v-text-field(
           data-test="username-input",
@@ -27,7 +27,7 @@ v-container(fill-height, align-center, justify-center)
           name="username",
           :error-messages="errors.first('username')",
           label="Username",
-          browser-autocomplete="username",
+          autocomplete="username",
           maxlength="32")
         password-field(
           data-test="password-input",
@@ -37,7 +37,7 @@ v-container(fill-height, align-center, justify-center)
           name="password",
           :error-messages="errors.first('password')",
           label="Password",
-          browser-autocomplete="new-password",
+          autocomplete="new-password",
           maxlength="32",
           counter)
         v-text-field(
@@ -48,7 +48,7 @@ v-container(fill-height, align-center, justify-center)
           name="fullname",
           :error-messages="errors.first('fullname')",
           label="Full Name",
-          browser-autocomplete="name")
+          autocomplete="name")
         v-layout(row, reverse)
           v-flex(shrink)
             v-btn.ma-0.text-none(
@@ -62,7 +62,7 @@ v-container(fill-height, align-center, justify-center)
           v-flex(shrink)
             v-btn.ma-0.text-none(
               data-test="login-link",
-              flat,
+              text,
               color="primary",
               :disabled="processing",
               to="/login")

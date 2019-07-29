@@ -1,10 +1,15 @@
 module.exports = {
   lintOnSave: false,
+  transpileDependencies: ['vuetify'],
   configureWebpack: {
     resolve: {
       alias: {
         'vee-validate$': 'vee-validate/dist/vee-validate.minimal.esm.js'
       }
+    },
+    externals: {
+      vue: 'Vue',
+      vuetify: 'Vuetify'
     }
   },
   chainWebpack: config => {

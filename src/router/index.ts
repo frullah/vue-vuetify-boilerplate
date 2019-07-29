@@ -6,18 +6,16 @@ Vue.use(VueRouter)
 
 export const defaultRoutes: RouteConfig[] = [
   {
+    name: 'home',
     path: '/',
     component: () => import('@/views/home.vue'),
-    meta: {
-      title: 'Halaman utama'
-    }
+    meta: { title: 'Halaman utama' }
   },
   {
+
     path: '/reset-password',
     component: () => import('@/views/reset-password/index.vue'),
-    meta: {
-      title: 'Reset password'
-    }
+    meta: { title: 'Reset password' }
   },
   {
     path: '/login',
@@ -26,9 +24,7 @@ export const defaultRoutes: RouteConfig[] = [
       if (store.getters['user/isLoggedIn']) return next('/')
       next()
     },
-    meta: {
-      title: 'Login'
-    }
+    meta: { title: 'Login' }
   },
   {
     path: '/signup',
@@ -37,9 +33,7 @@ export const defaultRoutes: RouteConfig[] = [
       if (store.getters['user/isLoggedIn']) return next('/')
       next()
     },
-    meta: {
-      title: 'Sign up'
-    }
+    meta: { title: 'Sign up' }
   },
   {
     path: '/logout',
@@ -51,9 +45,7 @@ export const defaultRoutes: RouteConfig[] = [
   {
     path: '*',
     component: () => import('@/views/not-found.vue'),
-    meta: {
-      title: 'Halaman tidak ditemukan'
-    }
+    meta: { title: 'Halaman tidak ditemukan' }
   }
 ]
 

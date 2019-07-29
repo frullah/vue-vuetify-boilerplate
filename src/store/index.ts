@@ -8,10 +8,7 @@ import user from './modules/user'
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store<{
-  app: typeof app.state,
-  user: typeof user.state
-}>({
+const store = new Vuex.Store({
   modules: {
     app,
     user

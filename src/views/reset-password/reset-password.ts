@@ -18,6 +18,10 @@ export default class ResetPassword extends Vue {
     return !this.email || this.processing
   }
 
+  get hasError () {
+    return this.error !== null
+  }
+
   async resetPassword () {
     if (this.processing) return
     this.processing = true
