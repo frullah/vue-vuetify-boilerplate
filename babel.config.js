@@ -13,14 +13,6 @@ module.exports = {
     ]
   ],
   plugins: [
-    [
-      'module:fast-async',
-      {
-        codeGenerationOptions: {
-          wrapAwait: false,
-          es6target: true
-        }
-      }
-    ]
+    'transform-async-to-promises'
   ]
 }

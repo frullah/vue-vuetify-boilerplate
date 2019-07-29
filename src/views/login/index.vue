@@ -2,11 +2,12 @@
 
 v-container(fill-height, align-center, justify-center)
   v-card(width="480px")
-    v-card-title.title.justify-center
+    v-card-title.justify-center
       | Login
     v-card-text
       v-alert(
         dismissible,
+        dark,
         color="red",
         transition="slide-y-reverse-transition",
         :value="error")
@@ -18,7 +19,7 @@ v-container(fill-height, align-center, justify-center)
           v-model="username",
           :readonly="processing",
           autofocus,
-          outline,
+          outlined,
           autocomplete="on",
           name="username",
           label="Username or email",
@@ -29,16 +30,16 @@ v-container(fill-height, align-center, justify-center)
           data-test="password-input",
           v-model="password",
           :readonly="processing",
-          outline,
+          outlined,
           autocomplete="current-password",
           label="Password",
           name="password",
           v-validate.disable="'required'",
           :error-messages="errors.first('password')")
-        v-layout(align-center)
+        v-layout.mx-0(row align-center justify-end)
           v-flex(xs6)
             v-checkbox.mt-0(label="Remember me", v-model="remember", hide-details)
-          v-flex.text-xs-right(xs6)
+          v-flex.text-right(xs6)
             v-btn.ma-0.text-none(
               type="submit",
               color="primary"
@@ -51,14 +52,14 @@ v-container(fill-height, align-center, justify-center)
         text,
         color="primary",
         :disabled="processing",
-        to="/reset-password")
+        :to="{ name: 'reset password' }")
           | Forgot password
       v-divider(vertical)
       v-btn.ma-0.text-none(
         data-test="signup-link",
         text,
         color="primary",
-        to="/signup")
+        :to="{ name: 'register' }")
         | Create account
       v-spacer
 

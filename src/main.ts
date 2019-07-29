@@ -29,7 +29,9 @@ new Vue({
   router,
   store,
   vuetify: new Vuetify({
-    iconfont: 'md'
+    icons: {
+      iconfont: 'md'
+    }
   }),
   render: h => h(App)
 }).$mount('#app')

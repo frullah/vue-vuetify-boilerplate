@@ -39,7 +39,7 @@ export default class ResetPassword extends Vue {
         const { response }: AxiosError = error
 
         if (response === undefined) {
-          this.error = 'Cannot connect to server'
+          this.error = 'Cannot connect to the server'
           return
         }
 

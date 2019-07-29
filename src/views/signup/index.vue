@@ -2,17 +2,17 @@
 
 v-container(fill-height, align-center, justify-center)
   v-card(width="480px")
-    v-card-title.title.justify-center
-      | Sign up
-    v-card-text
-      form(data-test="form", ref="form", @submit.prevent="signup")
+    form(data-test="form", ref="form", @submit.prevent="signup")
+      v-card-title.justify-center
+        | Sign up
+      v-card-text
         v-text-field(
           data-test="email-input",
           v-model="email",
           v-validate="'required|email|user-availability:email,false'",
           data-vv-delay="350",
           autofocus,
-          outline,
+          outlined,
           name="email",
           :error-messages="errors.first('email')",
           label="Email",
@@ -23,7 +23,7 @@ v-container(fill-height, align-center, justify-center)
           v-model="username",
           v-validate="'required|min:5|max:32|user-availability:username,false'",
           data-vv-delay="350",
-          outline,
+          outlined,
           name="username",
           :error-messages="errors.first('username')",
           label="Username",
@@ -33,7 +33,7 @@ v-container(fill-height, align-center, justify-center)
           data-test="password-input",
           v-model="password",
           v-validate="'required|min:5|max:32'",
-          outline,
+          outlined,
           name="password",
           :error-messages="errors.first('password')",
           label="Password",
@@ -44,12 +44,13 @@ v-container(fill-height, align-center, justify-center)
           data-test="fullname-input",
           v-model="fullname",
           v-validate="'required'",
-          outline,
+          outlined,
           name="fullname",
           :error-messages="errors.first('fullname')",
           label="Full Name",
           autocomplete="name")
-        v-layout(row, reverse)
+      v-card-actions
+        v-layout.mx-0(row, reverse)
           v-flex(shrink)
             v-btn.ma-0.text-none(
               data-test="submit-btn",
@@ -65,7 +66,7 @@ v-container(fill-height, align-center, justify-center)
               text,
               color="primary",
               :disabled="processing",
-              to="/login")
+              :to="{ name: 'sign in' }")
                 | Just login
 
 </template>

@@ -1,8 +1,13 @@
 import store from '@/store'
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import VueRouter, { RouteConfig, NavigationGuard } from 'vue-router'
 
 Vue.use(VueRouter)
+
+const unloggedInBeforeEnter: NavigationGuard<Vue> = (to, from, next) => {
+  if (store.getters['user/isLoggedIn']) return next('/')
+  next()
+}
 
 export const defaultRoutes: RouteConfig[] = [
   {
@@ -12,30 +17,27 @@ export const defaultRoutes: RouteConfig[] = [
     meta: { title: 'Halaman utama' }
   },
   {
-
+    name: 'reset password',
     path: '/reset-password',
     component: () => import('@/views/reset-password/index.vue'),
     meta: { title: 'Reset password' }
   },
   {
+    name: 'sign in',
     path: '/login',
     component: () => import('@/views/login/index.vue'),
-    beforeEnter (to, from, next) {
-      if (store.getters['user/isLoggedIn']) return next('/')
-      next()
-    },
+    beforeEnter: unloggedInBeforeEnter,
     meta: { title: 'Login' }
   },
   {
+    name: 'register',
     path: '/signup',
     component: () => import('@/views/signup/index.vue'),
-    beforeEnter (to, from, next) {
-      if (store.getters['user/isLoggedIn']) return next('/')
-      next()
-    },
+    beforeEnter: unloggedInBeforeEnter,
     meta: { title: 'Sign up' }
   },
   {
+    name: 'logout',
     path: '/logout',
     async beforeEnter (to, from, next) {
       await store.dispatch('user/LOGOUT')
@@ -56,13 +58,14 @@ const router = new VueRouter({
 
 router.beforeResolve((to, from, next) => {
   const lastMatched = to.matched[to.matched.length - 1]
-  let title = 'Vue Vuetify Template'
+  const baseTitle = 'Vue Vuetify Template'
 
   if (typeof lastMatched.meta.title === 'string') {
-    title = `${lastMatched.meta.title} - ${title}`
+    document.title = `${lastMatched.meta.title} - ${baseTitle}`
+  } else {
+    document.title = baseTitle
   }
 
-  document.title = title
   next()
 })
 

@@ -25,9 +25,6 @@ export default class SignUp extends Vue {
     Validator.extend('user-availability', userAvailability)
   }
 
-  created () {
-  }
-
   async signup () {
     if (this.processing) return
     this.processing = true

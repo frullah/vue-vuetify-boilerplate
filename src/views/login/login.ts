@@ -42,7 +42,7 @@ export default class Login extends Vue {
       } catch (error) {
         const { response }: AxiosError = error
         if (response === undefined) {
-          this.error = 'Cannot connect to server'
+          this.error = 'Cannot connect to the server'
         } else {
           switch (response.status) {
             case FORBIDDEN:

@@ -6,7 +6,7 @@ export const userAvailability: Rule = {
   getMessage (field, args, data) {
     return data.notChecked
       ? `The ${field} is ${data.message}`
-      : `Cannot check ${field} to server`
+      : `Cannot check ${field} to the server`
   },
   async validate (value, args) {
     if (args === undefined) {
@@ -28,7 +28,7 @@ export const userAvailability: Rule = {
     } catch (error) {
       const { response }: AxiosError = error
       if (response === undefined) {
-        message = 'Cannot connect to server'
+        message = 'Cannot connect to the server'
       }
     }
 

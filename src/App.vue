@@ -36,12 +36,12 @@ v-app
         v-btn.text-none(
           data-test="app-login-btn",
           text,
-          to="/login")
+          :to="{ name: 'sign in' }")
           | Log in
         v-btn.text-none(
           data-test="app-signup-btn",
           text,
-          to="/signup")
+          :to="{ name: 'register' }")
           | Sign up
 
   v-navigation-drawer(
