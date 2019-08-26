@@ -6,11 +6,11 @@ v-container(fill-height, align-center, justify-center)
       | Login
     v-card-text
       v-alert(
-        dismissible,
         dark,
+        dismissible,
         color="red",
         transition="slide-y-reverse-transition",
-        :value="error")
+        :value="hasError")
           | {{ error }}
       form(data-test="form", ref="form", @submit.prevent="login")
         v-text-field(

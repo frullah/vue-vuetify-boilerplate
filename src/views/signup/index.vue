@@ -2,6 +2,13 @@
 
 v-container(fill-height, align-center, justify-center)
   v-card(width="480px")
+    v-alert(
+      dark,
+      dismissible,
+      color="red",
+      transition="slide-y-reverse-transition",
+      :value="hasError")
+        | {{ error }}
     form(data-test="form", ref="form", @submit.prevent="signup")
       v-card-title.justify-center
         | Sign up
@@ -21,7 +28,7 @@ v-container(fill-height, align-center, justify-center)
         v-text-field(
           data-test="username-input",
           v-model="username",
-          v-validate="'required|min:5|max:32|user-availability:username,false'",
+          v-validate="'required|length:5,32|user-availability:username,false'",
           data-vv-delay="350",
           outlined,
           name="username",
@@ -32,7 +39,7 @@ v-container(fill-height, align-center, justify-center)
         password-field(
           data-test="password-input",
           v-model="password",
-          v-validate="'required|min:5|max:32'",
+          v-validate="'required|length:5,32'",
           outlined,
           name="password",
           :error-messages="errors.first('password')",
@@ -41,13 +48,13 @@ v-container(fill-height, align-center, justify-center)
           maxlength="32",
           counter)
         v-text-field(
-          data-test="fullname-input",
-          v-model="fullname",
+          data-test="name-input",
+          v-model="name",
           v-validate="'required'",
           outlined,
-          name="fullname",
-          :error-messages="errors.first('fullname')",
-          label="Full Name",
+          name="name",
+          :error-messages="errors.first('name')",
+          label="Name",
           autocomplete="name")
       v-card-actions
         v-layout.mx-0(row, reverse)

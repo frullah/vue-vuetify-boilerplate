@@ -2,9 +2,11 @@ import App from '@/App.vue'
 import store from '@/store'
 import { Wrapper, mount, createLocalVue, ThisTypedMountOptions } from '@vue/test-utils'
 import Vuetify from 'vuetify'
+import router from '@/router'
 import VueRouter from 'vue-router'
 
 const localVue = createLocalVue()
+localVue.use(VueRouter)
 
 describe('App view', () => {
   type Instance = InstanceType<typeof App>
@@ -15,7 +17,7 @@ describe('App view', () => {
       return mount(App, {
         localVue,
         vuetify: new Vuetify(),
-        router: new VueRouter({ mode: 'history' }),
+        router,
         store,
         ...options
       })

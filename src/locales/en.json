@@ -1,0 +1,18 @@
+{
+  "api": {
+    "error": {
+      "server": "Cannot connect to the server"
+    }
+  },
+  "user": {
+    "disabled": "Account disabled",
+    "incorrect": "Username or password is incorrect",
+    "notFound": "Username or email doesn't exists"
+  },
+  "register": {
+    "success": "Register success"
+  },
+  "resetPassword": {
+    "success": "Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder."
+  }
+}

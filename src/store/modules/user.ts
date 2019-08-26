@@ -1,34 +1,42 @@
-import api from '@/api'
+import api, { accessTokenHeader, refreshTokenHeader } from '@/api'
 import { AxiosResponse } from 'axios'
 import { OK } from 'http-status-codes'
 import { Module } from 'vuex'
 import router from '@/router'
 import { IToken, ILogin } from '@/types'
 
-const accessTokenHeaderName = 'X-Access-Token'
-const refreshTokenHeaderName = 'X-Refresh-Token'
+interface UserData {
+  username: string | null,
+  role: string | null,
+  name: string | null,
+}
 
 export default {
   namespaced: true,
   actions: {
-    LOGOUT ({ state, commit }) {
+    LOGOUT ({ commit }) {
       commit('CLEAR_TOKEN')
       commit('app/SET_NAVIGATION_ITEMS', null, { root: true })
     },
-    async LOGIN ({ dispatch }, { identifier, password }: ILogin) {
-      const { data } = await api.post('auth', { identifier, password })
+    async LOGIN ({ dispatch }, { username, password }: ILogin) {
+      const response = await api.post('/auth/login', { username, password })
+
+      if (response.status !== OK) {
+        return response
+      }
+
       return dispatch('FETCH', {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken
-      } as IToken)
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken
+      })
     },
-    async FETCH ({ state, commit }, { accessToken, refreshToken } : IToken) {
+    async FETCH ({ commit }, { accessToken, refreshToken } : IToken) {
       let user: AxiosResponse<any>
       try {
-        user = await api.get('auth/data', {
+        user = await api.get('/auth/data', {
           headers: {
-            [accessTokenHeaderName]: accessToken,
-            [refreshTokenHeaderName]: refreshToken
+            [accessTokenHeader]: accessToken,
+            [refreshTokenHeader]: refreshToken
           }
         })
       } catch (error) {
@@ -37,29 +45,21 @@ export default {
       }
 
       if (user.status === OK) {
-        state.accessToken = accessToken
-        if (accessTokenHeaderName in user.headers) {
-          accessToken = user.headers[accessTokenHeaderName]
-        }
-        if (refreshTokenHeaderName in user.headers) {
-
-        }
-        api.defaults.headers[accessTokenHeaderName] = accessToken
+        api.defaults.headers[accessTokenHeader] = accessToken
         window.localStorage.setItem('accessToken', accessToken!)
 
-        state.refreshToken = refreshToken
-        api.defaults.headers[refreshTokenHeaderName] = refreshToken
+        api.defaults.headers[refreshTokenHeader] = refreshToken
         window.localStorage.setItem('refreshToken', refreshToken!)
 
-        state.data = user.data
         const { routes, navItems } = await import(`@/router/roles/admin`)
         router.addRoutes(routes)
+        commit('SET_USER', { data: user.data, accessToken, refreshToken })
         commit('app/SET_NAVIGATION_ITEMS', navItems, { root: true })
       }
 
       return user
     },
-    async LOAD_SESSION ({ dispatch, state, commit }) {
+    async LOAD_SESSION ({ dispatch }) {
       const accessToken = window.localStorage.getItem('accessToken')
       const refreshToken = window.localStorage.getItem('refreshToken')
       if (accessToken !== null && refreshToken !== null) {
@@ -77,8 +77,13 @@ export default {
       state.data = null
       state.accessToken = null
       state.refreshToken = null
-      delete api.defaults.headers[accessTokenHeaderName]
-      delete api.defaults.headers[refreshTokenHeaderName]
+      delete api.defaults.headers[accessTokenHeader]
+      delete api.defaults.headers[refreshTokenHeader]
+    },
+    SET_USER (state, value: {data: UserData} & IToken) {
+      state.data = value.data
+      state.accessToken = value.accessToken
+      state.refreshToken = value.refreshToken
     }
   },
   state: {
@@ -88,11 +93,7 @@ export default {
   }
 } as Module<
   IToken & {
-    data: null | {
-      username: string | null,
-      roles: string | null,
-      fullName: string | null,
-    }
+    data: null | UserData
   },
   {}
 >

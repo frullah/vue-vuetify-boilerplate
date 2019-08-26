@@ -21,45 +21,50 @@ export default class Login extends Vue {
     username: IVTextField
   }
 
+  get hasError () {
+    return this.error !== null
+  }
+
   async login () {
     if (this.processing) return
     this.processing = true
     this.error = null
 
-    if (await this.$validator.validateAll()) {
-      try {
-        const result = await this.$store.dispatch(
-          'user/LOGIN',
-          {
-            identifier: this.username,
-            password: this.password
-          }
-        )
-
-        if (result.status === OK) {
-          this.$router.push('/')
-        }
-      } catch (error) {
-        const { response }: AxiosError = error
-        if (response === undefined) {
-          this.error = 'Cannot connect to the server'
-        } else {
-          switch (response.status) {
-            case FORBIDDEN:
-              this.error = 'Account disabled'
-              break
-
-            case BAD_REQUEST:
-            case UNAUTHORIZED:
-              this.error = 'Username or password is invalid'
-              break
-          }
-        }
-      }
-    } else {
+    if (!await this.$validator.validateAll()) {
+      this.processing = false
       focusToErrorTextField(this.$refs.form)
+      return
     }
 
-    this.processing = false
+    try {
+      const response = await this.$store.dispatch('user/LOGIN', {
+        username: this.username,
+        password: this.password
+      })
+
+      if (response.status === OK) {
+        this.$router.push('/')
+      }
+    } catch (error) {
+      const { response }: AxiosError = error
+
+      if (response === undefined) {
+        this.error = this.$t('api.error.server') as string
+        return
+      }
+
+      switch (response.status) {
+        case FORBIDDEN:
+          this.error = this.$t('user.disabled') as string
+          break
+
+        case BAD_REQUEST:
+        case UNAUTHORIZED:
+          this.error = this.$t('user.incorrect') as string
+          break
+      }
+    } finally {
+      this.processing = false
+    }
   }
 }

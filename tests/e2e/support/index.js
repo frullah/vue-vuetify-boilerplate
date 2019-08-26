@@ -17,4 +17,5 @@
 // import './commands'
 
 // Alternatively you can use CommonJS syntax:
+/// <reference types="cypress" />
 require('./commands')

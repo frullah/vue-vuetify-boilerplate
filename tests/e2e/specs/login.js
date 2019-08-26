@@ -31,7 +31,7 @@ describe('Login views', () => {
     })
   })
 
-  it('redirect to home page', () => {
+  it.only('redirect to home page', () => {
     cy.login()
   })
 })

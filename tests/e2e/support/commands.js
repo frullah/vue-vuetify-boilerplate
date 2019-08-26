@@ -36,3 +36,7 @@ Cypress.Commands.add('login', () => {
 
   cy.location('pathname').should('eq', '/')
 })
+
+Cypress.Commands.add('resetDb', () => {
+  cy.request('POST', Cypress.env('backendUrl') + '/db/user/reset')
+})

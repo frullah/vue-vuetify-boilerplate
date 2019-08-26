@@ -16,3 +16,6 @@ module.exports = {
     'transform-async-to-promises'
   ]
 }
+if (process.env.BABEL_ENV === 'test') {
+  module.exports.plugins.push('require-context-hook')
+}

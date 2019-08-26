@@ -30,7 +30,7 @@ declare namespace App {
   }
 
   interface ILogin {
-    identifier: string
+    username: string
     password: string
   }
 }

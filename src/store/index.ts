@@ -12,12 +12,10 @@ const store = new Vuex.Store({
   modules: {
     app,
     user
-  }
-  // strict: process.env.NODE_ENV !== 'production',
+  },
+  strict: process.env.NODE_ENV !== 'production'
   // TODO: Enable when deploy
   // plugins: [createPersistedState()]
 })
-
-;(window as any).store = store
 
 export default store

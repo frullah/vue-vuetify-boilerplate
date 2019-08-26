@@ -1,12 +1,13 @@
 import api from '@/api'
 import { AxiosError } from 'axios'
 import { Rule } from 'vee-validate'
+import i18n from '@/i18n'
 
 export const userAvailability: Rule = {
   getMessage (field, args, data) {
-    return data.notChecked
-      ? `The ${field} is ${data.message}`
-      : `Cannot check ${field} to the server`
+    return data.isError
+      ? data.message
+      : `The ${field} is ${data.message}`
   },
   async validate (value, args) {
     if (args === undefined) {
@@ -16,19 +17,24 @@ export const userAvailability: Rule = {
     const context = args[0] || 'user'
     const mustExists = args[1] === 'true' || args[1] !== 'false'
     let exists = false
-    let notChecked = false
+    let isError = false
     let message: string | undefined
 
     try {
       const response = await api.get(
-        '/user-availibility/username',
+        '/user-availibility',
         { params: { context, value } }
       )
-      exists = response.status === 200
+      // check is the user available for registered
+      exists = (response.data.data.available === false)
     } catch (error) {
+      isError = true
       const { response }: AxiosError = error
       if (response === undefined) {
         message = 'Cannot connect to the server'
+      } else {
+        message = 'an unexpected error occurred'
+        console.log(error)
       }
     }
 
@@ -41,8 +47,8 @@ export const userAvailability: Rule = {
     }
 
     return {
-      valid: exists === mustExists && message === undefined,
-      data: { message, notChecked }
+      valid: (exists === mustExists),
+      data: { message, isError }
     }
   }
 }
